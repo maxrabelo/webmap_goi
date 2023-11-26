@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/ZONEAMENTO_3.js"></script>
+        <script src="data/MACROZONEAMENTO_4.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:15, minZoom:12
+        }).fitBounds([[-16.648287345652392,-49.23759252629455],[-16.443955455219857,-48.932147889499824]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            map.setMaxBounds(map.getBounds());
+        }
+        map.createPane('pane_GoogleRoad_0');
+        map.getPane('pane_GoogleRoad_0').style.zIndex = 400;
+        var layer_GoogleRoad_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleRoad_0',
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            minZoom: 12,
+            maxZoom: 15,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_GoogleRoad_0;
+        map.addLayer(layer_GoogleRoad_0);
+        map.createPane('pane_GoogleSatellite_1');
+        map.getPane('pane_GoogleSatellite_1').style.zIndex = 401;
+        var layer_GoogleSatellite_1 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleSatellite_1',
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            minZoom: 12,
+            maxZoom: 15,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_GoogleSatellite_1;
+        map.createPane('pane_GoogleHybrid_2');
+        map.getPane('pane_GoogleHybrid_2').style.zIndex = 402;
+        var layer_GoogleHybrid_2 = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleHybrid_2',
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            minZoom: 12,
+            maxZoom: 15,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_GoogleHybrid_2;
+        function pop_ZONEAMENTO_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CD_GEOCODI'] !== null ? autolinker.link(feature.properties['CD_GEOCODI'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NM_MUNICIP'] !== null ? autolinker.link(feature.properties['NM_MUNICIP'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MACROZONA'] !== null ? autolinker.link(feature.properties['MACROZONA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ZONEAMENTO'] !== null ? autolinker.link(feature.properties['ZONEAMENTO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ZONEAMENTO_3_0(feature) {
+            switch(String(feature.properties['ZONEAMENTO'])) {
+                case 'ZUMB I':
+                    return {
+                pane: 'pane_ZONEAMENTO_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,0,25,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ZUMB II':
+                    return {
+                pane: 'pane_ZONEAMENTO_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,132,1,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ZUOS I':
+                    return {
+                pane: 'pane_ZONEAMENTO_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,225,1,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ZUOS II':
+                    return {
+                pane: 'pane_ZONEAMENTO_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,234,1,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ZUDES I':
+                    return {
+                pane: 'pane_ZONEAMENTO_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,1,124,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ZUDES II':
+                    return {
+                pane: 'pane_ZONEAMENTO_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(132,1,255,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ZEPAM':
+                    return {
+                pane: 'pane_ZONEAMENTO_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,130,13,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ZPDSr':
+                    return {
+                pane: 'pane_ZONEAMENTO_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(66,214,52,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_ZONEAMENTO_3');
+        map.getPane('pane_ZONEAMENTO_3').style.zIndex = 403;
+        map.getPane('pane_ZONEAMENTO_3').style['mix-blend-mode'] = 'normal';
+        var layer_ZONEAMENTO_3 = new L.geoJson(json_ZONEAMENTO_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ZONEAMENTO_3',
+            layerName: 'layer_ZONEAMENTO_3',
+            pane: 'pane_ZONEAMENTO_3',
+            onEachFeature: pop_ZONEAMENTO_3,
+            style: style_ZONEAMENTO_3_0,
+        });
+        bounds_group.addLayer(layer_ZONEAMENTO_3);
+        function pop_MACROZONEAMENTO_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CD_GEOCODI'] !== null ? autolinker.link(feature.properties['CD_GEOCODI'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NM_MUNICIP'] !== null ? autolinker.link(feature.properties['NM_MUNICIP'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MACROZONA'] !== null ? autolinker.link(feature.properties['MACROZONA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ZONEAMENTO'] !== null ? autolinker.link(feature.properties['ZONEAMENTO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MACROZONEAMENTO_4_0(feature) {
+            switch(String(feature.properties['MACROZONA'])) {
+                case 'MZ CÓRREGO MACAQUINHO':
+                    return {
+                pane: 'pane_MACROZONEAMENTO_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(1,128,255,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'MZ RIBEIRÃO SOZINHO':
+                    return {
+                pane: 'pane_MACROZONEAMENTO_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,193,14,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'MZ RIBEIRÃO JOÃO LEITE':
+                    return {
+                pane: 'pane_MACROZONEAMENTO_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(17,112,14,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'MZ RIBEIRÃO BONSUCESO':
+                    return {
+                pane: 'pane_MACROZONEAMENTO_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,132,1,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'MZ URBANA':
+                    return {
+                pane: 'pane_MACROZONEAMENTO_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,1,9,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_MACROZONEAMENTO_4');
+        map.getPane('pane_MACROZONEAMENTO_4').style.zIndex = 404;
+        map.getPane('pane_MACROZONEAMENTO_4').style['mix-blend-mode'] = 'normal';
+        var layer_MACROZONEAMENTO_4 = new L.geoJson(json_MACROZONEAMENTO_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_MACROZONEAMENTO_4',
+            layerName: 'layer_MACROZONEAMENTO_4',
+            pane: 'pane_MACROZONEAMENTO_4',
+            onEachFeature: pop_MACROZONEAMENTO_4,
+            style: style_MACROZONEAMENTO_4_0,
+        });
+        bounds_group.addLayer(layer_MACROZONEAMENTO_4);
+        map.addLayer(layer_MACROZONEAMENTO_4);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'MACROZONEAMENTO<br /><table><tr><td style="text-align: center;"><img src="legend/MACROZONEAMENTO_4_MZCÓRREGOMACAQUINHO0.png" /></td><td>MZ CÓRREGO MACAQUINHO</td></tr><tr><td style="text-align: center;"><img src="legend/MACROZONEAMENTO_4_MZRIBEIRÃOSOZINHO1.png" /></td><td>MZ RIBEIRÃO SOZINHO</td></tr><tr><td style="text-align: center;"><img src="legend/MACROZONEAMENTO_4_MZRIBEIRÃOJOÃOLEITE2.png" /></td><td>MZ RIBEIRÃO JOÃO LEITE</td></tr><tr><td style="text-align: center;"><img src="legend/MACROZONEAMENTO_4_MZRIBEIRÃOBONSUCESO3.png" /></td><td>MZ RIBEIRÃO BONSUCESO</td></tr><tr><td style="text-align: center;"><img src="legend/MACROZONEAMENTO_4_MZURBANA4.png" /></td><td>MZ URBANA</td></tr></table>': layer_MACROZONEAMENTO_4,'ZONEAMENTO<br /><table><tr><td style="text-align: center;"><img src="legend/ZONEAMENTO_3_ZUMBI0.png" /></td><td>ZUMB I</td></tr><tr><td style="text-align: center;"><img src="legend/ZONEAMENTO_3_ZUMBII1.png" /></td><td>ZUMB II</td></tr><tr><td style="text-align: center;"><img src="legend/ZONEAMENTO_3_ZUOSI2.png" /></td><td>ZUOS I</td></tr><tr><td style="text-align: center;"><img src="legend/ZONEAMENTO_3_ZUOSII3.png" /></td><td>ZUOS II</td></tr><tr><td style="text-align: center;"><img src="legend/ZONEAMENTO_3_ZUDESI4.png" /></td><td>ZUDES I</td></tr><tr><td style="text-align: center;"><img src="legend/ZONEAMENTO_3_ZUDESII5.png" /></td><td>ZUDES II</td></tr><tr><td style="text-align: center;"><img src="legend/ZONEAMENTO_3_ZEPAM6.png" /></td><td>ZEPAM</td></tr><tr><td style="text-align: center;"><img src="legend/ZONEAMENTO_3_ZPDSr7.png" /></td><td>ZPDSr</td></tr></table>': layer_ZONEAMENTO_3,"Google Hybrid": layer_GoogleHybrid_2,"Google Satellite": layer_GoogleSatellite_1,"Google Road": layer_GoogleRoad_0,}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
